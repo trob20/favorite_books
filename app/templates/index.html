@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet"
+        href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" 
+        integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" 
+        crossorigin="anonymous">
+
+    {% load static %}   
+    <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}"  >
+
+    <title>Login & Registration</title>
+    
+</head>
+
+<body>
+    <div class="container">
+        <div class="box d-inline-block box_margin">
+            <h3><b>Registration</b></h3>
+            <br/>
+
+        <form action="/register" method="POST">
+        {% csrf_token %}
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">First Name</label>
+                <div class="col-sm-6">
+                    <input class="form-control" name="first_name" required/>
+                </div>
+            </div>
+            
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Last Name</label>
+                <div class="col-sm-6">
+                    <input class="form-control" name="last_name" required/>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Email</label>
+                <div class="col-sm-6">
+                    <input class="form-control" name="email" required/>
+                </div>
+            </div>
+            
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Password</label>
+                <div class="col-sm-6">
+                    <input class="form-control" type="password" name="password" autocapitalize="none" required/>
+                </div>
+            </div>
+            
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Confirm PW</label>
+                <div class="col-sm-6">
+                    <input class="form-control" type="password" name="confirm_password" autocapitalize="none" required/>
+                </div>
+            </div>
+            
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label"></label>
+                <div class="col-sm-7">
+                    <input type="submit" class="btnStyle btn btn-secondary" value="Register">
+                </div>
+            </div>
+        </form>
+        </div>
+
+
+        <div class="d-inline-block box_margin">
+            <h3><b>Login</b></h3>
+            <br/>
+
+        <form action="/login" method="POST">
+        {% csrf_token %}
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Email</label>
+                <div class="col-sm-9">
+                    <input class="form-control" name="email" required/>
+                </div>
+            </div> 
+            
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label">Password</label>
+                <div class="col-sm-9">
+                    <input class="form-control" type="password" name="password" autocapitalize="none" required/>
+                </div>
+            </div>
+            
+            <div class="form-group row">
+                <label class="col-sm-3 col-form-label"></label>
+                <div class="col-sm-9">
+                    <input type="submit" class="btnStyle btn btn-secondary" value="Log In">
+                </div>
+            </div>
+        </form>
+
+        </div>
+
+
+        <ul>
+            {% if messages %}      
+                {% for message in messages %}         
+                    <li class="text-danger messages">{{ message }}</li>
+                {% endfor %} 
+            {% endif %}
+        </ul>
+
+    </div>
+</body>
+</html>

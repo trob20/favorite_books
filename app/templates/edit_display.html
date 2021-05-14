@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<nav class="navbar">
+    <div class="container-fluid">
+        <h2 class="navbar-brand">Welcome, {{ first_name }}!</h2>
+
+        <div class="d-flex">
+            <a class="linkUnderline nav_margin" href="/books">Go Back</a>
+            <form action="/logout" method="POST">
+            {% csrf_token %}
+                <button class="nav-item linkUnderline btnLink">Log Out</button>
+            </form>
+        </div>
+    </div>
+</nav>
+<hr>
+
+
+<div class="box d-inline-block box_margin">
+
+    {% if book.uploaded_by.id == u_id %}
+        <form action="/books/update/{{ book.id }}" method="POST">
+        {% csrf_token %}
+            <input class="form-control input_format" type="text" name="title" value="{{ book.title }}">
+            <br/>
+            <p>Added by: {{ book.uploaded_by.first_name }} {{ book.uploaded_by.last_name }}</p>
+            <p>Added on: {{ book.created_at|date:"M j, Y @ g:i a" }}</p>
+            <p>Last updated on: {{ book.updated_at|date:"M j, Y @ g:i a" }}</p>
+
+            <div class="mb-3 row">
+                <label class="col-sm-2 col-form-label">Description:</label>
+                <div class="col-sm-6">
+                    <textarea class="form-control" type="textField" rows="2" name="desc">{{ book.desc }}</textarea>
+                </div>
+            </div>
+
+            <div class="btn_margin">
+                <button class="btn btn-secondary" type="submit">Update</button>
+                <button class="btn btn-danger" type="submit" formaction="/books/delete/{{ book.id }}">Delete</button>
+            </div>
+        </form>
+    {% endif %}
+
+    {% if book.uploaded_by.id != u_id %}
+        <p class="input_format">{{ book.title }}</p>
+        <p>Added by: {{ book.uploaded_by.first_name }} {{ book.uploaded_by.last_name }}</p>
+        <p>Added on: {{ book.created_at|date:"M j, Y @ g:i a" }}</p>
+        <p>Last updated on: {{ book.updated_at|date:"M j, Y @ g:i a" }}</p>
+        <p>Description: {{ book.desc }}</p>
+    {% endif %}
+</div>
+
+<div class="d-inline-block box_margin">
+    <h3>Users Who Like This Book:</h3>
+    <br/>
+        {% for favorite in book.favorite.all %}
+            <ul>
+                <li>
+                    {{favorite.first_name}} {{favorite.last_name}}
+                    <span class="pull-right">
+                    {% if favorite.id == u_id %}
+                            <form action="/books/unfavor/{{ book.id }}" method="POST">
+                            {% csrf_token %}
+                                <button class="linkUnderline btnLink" type="submit">Un-Favorite</button>
+                            </form>
+                    {% endif %}
+                    </span>
+                </li>
+            </ul>
+        {% endfor %}
+
+
+        {% if favorite == False and book.uploaded_by.id != u_id %}
+            <form action="/books/favor/{{ book.id }}" method="POST">
+            {% csrf_token %}
+                <button class="linkUnderline btnLink" type="submit">Add to Favorites</button>
+            </form>
+        {% endif %}
+
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<nav class="navbar">
+    <div class="container-fluid">
+        <h2 class="navbar-brand">Welcome, {{ first_name }}!</h2>
+
+        <div class="d-flex">
+            <a class="linkUnderline nav_margin" href="/books">Go Back</a>
+            <form action="/logout" method="POST">
+            {% csrf_token %}
+                <button class="nav-item linkUnderline btnLink">Log Out</button>
+            </form>
+        </div>
+    </div>
+</nav>
+<hr>
+
+<div class="d-inline-block box_margin">
+    <h3>Your favorite books:</h3>
+    <br/>
+    {% for book in favorite_books %}
+        <a class="linkUnderline" href="/books/{{ book.id }}"><b>{{ book.title }}</b></a>
+        <p class="p_dashboard">(added by {{ book.uploaded_by.first_name }} {{ book.uploaded_by.last_name }})</p>
+    <br/>
+    {% endfor %}
+</div>
+
+{% endblock %}

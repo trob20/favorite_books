@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<nav class="navbar">
+    <div class="container-fluid">
+        <h2 class="navbar-brand">Welcome, {{ first_name }}!</h2>
+
+        <div class="d-flex">
+            <a class="linkUnderline nav_margin" href="/books/favorites/{{ u_id }}">Favorites</a>
+            <form action="/logout" method="POST">
+            {% csrf_token %}
+                <button class="nav-item linkUnderline btnLink">Log Out</button>
+            </form>
+        </div>
+    </div>
+</nav>
+<hr>
+
+
+<div class="box d-inline-block box_margin">
+    <h3>Add a Favorite Book</h3>
+    <br/>
+    <form action="/books/add_book" method="POST">
+        {% csrf_token %}
+
+        <div class="mb-3 row">
+            <label class="col-sm-2 col-form-label">Title</label>
+            <div class="col-sm-6">
+                <input class="form-control" type="text" name="title"/>
+            </div>
+        </div>
+
+        <div class="mb-3 row">
+            <label class="col-sm-2 col-form-label">Description</label>
+            <div class="col-sm-6">
+                <textarea class="form-control" type="textField" rows="2" name="desc"></textarea>
+            </div>
+        </div>
+
+        <div class="col-sm-8">
+            <button class="btn btn-secondary" type="submit">Add</button>
+        </div>
+    </form>
+</div>
+
+<div class="d-inline-block box_margin">
+    <h3>All Books</h3>
+    <br/>
+    {% for book in books %}
+        <a class="linkUnderline" href="/books/{{ book.id }}"><b>{{ book.title }}</b></a>
+        <p class="p_dashboard">(added by {{ book.uploaded_by.first_name }} {{ book.uploaded_by.last_name }})</p>
+        
+            {% if book.favorite.all.first.id == u_id %}
+                <p class="italics p_dashboard">this is one of your favorites</p>
+            {% else %}
+                <form action="/books/favor/{{ book.id }}" method="POST">
+                {% csrf_token %}
+                    <button class="linkUnderline btnLink" type="submit">Add to Favorites</button>
+                </form>
+            {% endif %}   
+
+    <br/>
+    {% endfor %}
+</div>
+
+{% endblock %}
